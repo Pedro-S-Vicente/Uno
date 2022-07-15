@@ -1,0 +1,93 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.player {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.cards {
+    gap: 30px;
+}
+
+.carta {
+    width: 150px;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -25px;
+    font-size: 2em;
+    border-radius: 7px;
+    position: relative;
+}
+
+#player-1 .carta {
+    box-shadow:  0 -20px 20px rgba(0, 0, 0, 0.5);
+}
+
+#player-2 .carta {
+    box-shadow:  0 20px 20px rgba(0, 0, 0, 0.5);
+}
+
+.cards .carta {
+    margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.carta,
+.comprar {
+    cursor: pointer;
+    transition: all .2s linear;
+}
+
+#player-2 .carta:hover {
+    z-index: 9999 !important;
+    transform:translateY(10px);
+}
+
+.azul {
+    color: #FFFF;
+    background-color: #0A78B9;
+}
+
+.vermelho {
+    color: #FFFF;
+    background-color: #DA3E29;
+}
+
+.amarelo {
+    color: #FFFF;
+    background-color: #FFD237;
+}
+
+.verde {
+    color: #FFFF;
+    background-color: #84C03F;
+}
+
+.preto {
+    color: #FFFF;
+    background-color: #151515;
+}
+
+.carta-uno {
+    background-color: #151515;
+}
