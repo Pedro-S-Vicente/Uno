@@ -1,50 +1,66 @@
 class partida {
-    constructor (objPlayers) {
-        this.ultimaCarta = arrCartas[Math.floor(Math.random() * arrCartas.length)];
-        while(this.ultimaCarta.cor === 'preto') {
-            this.ultimaCarta = arrCartas[Math.floor(Math.random() * arrCartas.length)];
+    constructor(objPlayers) {
+        this.ultimaCarta =
+            arrCartas[Math.floor(Math.random() * arrCartas.length)];
+        while (this.ultimaCarta.cor === "preto") {
+            this.ultimaCarta =
+                arrCartas[Math.floor(Math.random() * arrCartas.length)];
         }
         this.objPlayers = objPlayers;
         this.vezPlayer = 0;
         this.sentidoHr = true;
         this.qtddComprarCarta = 0;
+        this.playerEmUno = null;
     }
 
-    iniciarPartida () {
+    iniciarPartida() {
         this.objPlayers.forEach((p) => {
-            for(let i=0; i < 7; i++)
-                p.comprarCarta();
+            for (let i = 0; i < 7; i++) p.comprarCarta();
         });
 
         this.atualizarHtmlPartida();
     }
 
-    jogarCarta (n) {
+    comprarXvezes(x, idPlayer) {
+        let i, e;
+        i = 0;
+        e = setInterval(() => {
+            i >= x ? clearInterval(e) : this.objPlayers[idPlayer].comprarCarta();
+            this.atualizarHtmlPartida();
+            i++;
+        }, 250);
+    }
+
+    jogarCarta(n) {
         let player, carta;
         player = this.objPlayers[this.vezPlayer];
         carta = player.cartas[n];
-        if (carta.cor === this.ultimaCarta.cor || carta.simbolo === this.ultimaCarta.simbolo || ((carta.cor === 'preto') && (this.ultimaCarta.cor != 'preto'))) {
+        if (
+            carta.cor === this.ultimaCarta.cor ||
+            carta.simbolo === this.ultimaCarta.simbolo ||
+            (carta.cor === "preto" && this.ultimaCarta.cor != "preto")
+        ) {
             player.removerCarta(n);
-            if (carta.simbolo[0] === '+') {
-                this.qtddComprarCarta += Number(carta.simbolo);
+            if (carta.simbolo[0] === "-") {
+                this.qtddComprarCarta += -(Number(carta.simbolo));
                 this.ultimaCarta = carta;
             } else {
-                for (let i=0; i<this.qtddComprarCarta; i++) 
-                    this.objPlayers[this.vezPlayer].comprarCarta();
+                this.comprarXvezes(this.qtddComprarCarta, this.vezPlayer);
                 this.qtddComprarCarta = 0;
             }
 
-            if (carta.simbolo === 'block') {
+            if (carta.simbolo === "block") {
                 this.mudarVez();
                 this.ultimaCarta = carta;
-            } else if (carta.simbolo === 'reverse') {
+            } else if (carta.simbolo === "reverse") {
                 this.sentidoHr = !this.sentidoHr;
                 this.ultimaCarta = carta;
-            } else if (carta.cor === 'preto') {
-                this.ultimaCarta = this.playerEscolherCor();
+            } else if (carta.cor === "preto") {
+                this.ultimaCarta = this.playerEscolherCor(carta.simbolo);
             } else {
                 this.ultimaCarta = carta;
             }
+            this.eventoUno();
             this.mudarVez();
             this.atualizarHtmlPartida();
             return true;
@@ -52,9 +68,9 @@ class partida {
         return false;
     }
 
-    mudarVez () {
+    mudarVez() {
         let i;
-        (this.sentidoHr) ? i=1 : i=-1;
+        this.sentidoHr ? (i = 1) : (i = -1);
         this.vezPlayer += i;
         if (this.vezPlayer < 0) {
             this.vezPlayer = this.objPlayers.length - 1;
@@ -64,82 +80,142 @@ class partida {
         this.seForBotJogue();
     }
 
-    seForBotJogue () {
+    seForBotJogue() {
         let player;
         player = this.objPlayers[this.vezPlayer];
-        if (player.constructor.name === 'bot') {
-            setTimeout(()=>{player.fazerJogada()},Math.floor(Math.random()*5000));
-            
+        if (player.constructor.name === "bot") {
+            player.fazerJogada();
         }
     }
 
-    playerEscolherCor() {
+    playerEscolherCor(simbolo) {
         let cor;
-        cor = prompt('Escolha a cor gagabundo');
-        return new carta(cor, 'mudarCor');
+        cor = prompt("Escolha a cor gagabundo");
+        return new carta(cor, simbolo);
     }
 
-    atualizarHtmlPartida () {
-        let divsPlayer, divUltimaCartas, html;
-        divsPlayer = document.querySelectorAll('.player');
-        divUltimaCartas = document.querySelector('.cards');
-        this.objPlayers.forEach((player, e) => {
-            html = '';
-            if (e === this.vezPlayer && player.constructor.name === 'player') {
-                player.cartas.forEach((carta, i) =>  {
-                    html += `
-                    <div class='carta ${carta.cor}' onclick='p.jogarCarta(${i})' style='z-index: ${i};'>
-                        ${carta.simbolo}
-                    </div>
-                    `
-                });
-            } else if (player.constructor.name === 'player') {
-                player.cartas.forEach((carta, i) =>  {
-                    html += `
-                    <div class='carta ${carta.cor}' style='z-index: ${i};'>
-                        ${carta.simbolo}
-                    </div>
-                    `
-                });
-            } else {
-                player.cartas.forEach((carta, i) =>  {
-                    html += `
-                    <div class='carta carta-uno' style='z-index: ${i};'>
-                    </div>
-                    `
-                });
-            }
-            divsPlayer[e].innerHTML = html;
-        })
-        divUltimaCartas.innerHTML = `
-        <div class='carta ${this.ultimaCarta.cor}'>
-            ${this.ultimaCarta.simbolo}
-        </div>
-        <div class='comprar carta preto' onclick='p.vezPlayerComprarCarta()'>
-            Compra
-        </div>
+    atualizarHtmlCartasPlayerAJogar() {
+        this.atualizarHtmlCartasPlayer(this.vezPlayer);
+    }
+
+    atualizarHtmlCartasPlayer (idPlayer) {
+        let html, divPlayer, player;
+        html = ``;
+        divPlayer = document.querySelectorAll('.player')[idPlayer];
+        player = this.objPlayers[idPlayer];
+        if (idPlayer === this.vezPlayer && player.constructor.name === "player") {
+            let divCartas;
+            divCartas = document.querySelectorAll(`#player-${idPlayer + 1} .carta`);
+            divCartas.forEach((carta, i)=> {
+                carta.setAttribute('onclick', `p.jogarCarta(${i})`)
+                console.log(2)
+            });
+            divPlayer.classList.add('jogar');
+            
+        } else if (player.constructor.name === "player") {
+            divPlayer.classList.remove('jogar');
+            player.cartas.forEach((carta, i) => {
+                html += `
+                <div class='carta ${carta.cor} carta-${carta.simbolo}' style='z-index: ${i};'>
+                </div>
+                `;
+            });
+            divPlayer.innerHTML = html;
+        } else {
+            player.cartas.forEach((carta, i) => {
+                html += `
+                <div class='carta carta-uno' style='z-index: ${i};'>
+                </div>
+                `;
+            });
+            divPlayer.innerHTML = html;
+        }
+    }
+
+    atualizarComprarCartas() {
+        let divUltimaCartas, htmlUltimaCartas;
+        divUltimaCartas = document.querySelector(".cards");
+        htmlUltimaCartas = `
+        <div class='carta ${this.ultimaCarta.cor} carta-${this.ultimaCarta.simbolo}'></div>
         `;
+        this.objPlayers.forEach((player, e) => {
+            if (e === this.vezPlayer && player.constructor.name === "player") {
+                htmlUltimaCartas += `
+                    <div class='comprar carta carta-uno' onclick='p.vezPlayerComprarCarta()'></div>
+                `;
+            } else if (player.constructor.name === "player") {
+                htmlUltimaCartas += `
+                    <div class='comprar carta carta-uno'></div>
+                `;
+            }
+        });
+        divUltimaCartas.innerHTML = htmlUltimaCartas;
+    }
+    atualizarHtmlPartida() {
+        this.objPlayers.forEach((player, e) => {
+            this.atualizarHtmlCartasPlayer(e);
+        });
+        this.atualizarComprarCartas();
     }
 
     fazerAnimacaoCartas() {
         let cartasPlayer, a;
-        cartasPlayer = document.querySelectorAll(`.player:nth-child(${this.vezPlayer+1}) .carta`);
-        a = Math.floor(Math.random() *cartasPlayer.length);
-        cartasPlayer[a].style.bottom = '10px';
-        cartasPlayer[a].style.zIndex = '99999';
+        cartasPlayer = document.querySelectorAll(
+            `#player-${this.vezPlayer + 1} .carta`
+        );
+        console.log(this.vezPlayer);
+        a = Math.floor(Math.random() * cartasPlayer.length);
+        cartasPlayer[a].classList.add("baixar-carta");
     }
 
     playerNaoPossuiCartaValida(player) {
-        return (player.cartas.filter((carta)=> {
-            return (carta.cor === this.ultimaCarta.cor || carta.simbolo === this.ultimaCarta.simbolo)
-        }).length === 0);
+        return (
+            player.cartas.filter((carta) => {
+                return (
+                    carta.cor === this.ultimaCarta.cor ||
+                    carta.simbolo === this.ultimaCarta.simbolo
+                );
+            }).length === 0
+        );
     }
 
-    vezPlayerComprarCarta () {
+    vezPlayerComprarCarta() {
         let player;
         player = this.objPlayers[this.vezPlayer];
         if (this.playerNaoPossuiCartaValida(player)) {
             player.comprarCarta();
+            this.atualizarHtmlPartida();
+        }
+    }
+
+    eventoUno() {
+        let player;
+        player = this.objPlayers[this.vezPlayer];
+        if (player.cartas.length === 1) {
+            this.fazerBtnUno();
+            this.playerEmUno = this.vezPlayer;
+        }
+    }
+
+    fazerBtnUno() {
+        let wrapperBtnUno;
+        wrapperBtnUno = document.querySelector(".wrapper__btn_uno");
+        wrapperBtnUno.style.display = "flex";
+    }
+
+    esconderBtnUno() {
+        let wrapperBtnUno;
+        wrapperBtnUno = document.querySelector(".wrapper__btn_uno");
+        wrapperBtnUno.style.display = "none";
+    }
+
+    uno(idQuemApertou) {
+        if (this.playerEmUno != null) {
+            if (idQuemApertou != this.playerEmUno) {
+                this.comprarXvezes(2, this.playerEmUno);
+            }
+            this.esconderBtnUno();
+            this.playerEmUno = null;
             this.atualizarHtmlPartida();
         }
     }

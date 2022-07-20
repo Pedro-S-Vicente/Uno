@@ -1,15 +1,15 @@
 class player {
-    constructor () {
+    constructor() {
         this.cartas = [];
     }
 
-    comprarCarta () {
+    comprarCarta() {
         let r;
         r = Math.floor(Math.random() * arrCartas.length);
         this.cartas.push(arrCartas[r]);
     }
 
-    removerCarta (n) {
+    removerCarta(n) {
         this.cartas.splice(n, 1);
     }
 }

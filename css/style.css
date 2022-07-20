@@ -5,17 +5,40 @@
 }
 
 .container {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     display: flex;
+    overflow-x: hidden;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #463f61;
 }
 
-.wrapper {
+.cards,
+.wrapper_player {
     width: 100%;
+    flex: none;
     display: flex;
     justify-content: center;
+}
+
+.cards {
+    gap: 30px;
+}
+
+.cards .carta {
+    margin: 0;
+    box-shadow: -10px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+
+.wrapper_player {
+    overflow-x: auto;
+}
+
+.wrapper_cartas {
+    width: auto;
+    display: flex;
 }
 
 .player {
@@ -23,71 +46,58 @@
     overflow-y: hidden;
 }
 
-.cards {
-    gap: 30px;
+#player-1 {
+    overflow-x: hidden !important;
 }
 
-.carta {
-    width: 150px;
-    height: 240px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: -25px;
-    font-size: 2em;
-    border-radius: 7px;
-    position: relative;
-}
-
-#player-1 .carta {
-    box-shadow:  0 -20px 20px rgba(0, 0, 0, 0.5);
-}
-
-#player-2 .carta {
-    box-shadow:  0 20px 20px rgba(0, 0, 0, 0.5);
-}
-
-.cards .carta {
-    margin: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.carta,
 .comprar {
     cursor: pointer;
     transition: all .2s linear;
 }
 
-#player-2 .carta:hover {
+#player-1 .carta {
+    transform: rotate(180deg);
+    box-shadow:  10px 0px 0px rgba(0, 0, 0, 0.5);
+}
+
+#player-2 .carta {
+    box-shadow:  -10px 0px 0px rgba(0, 0, 0, 0.5);
+}
+
+#player-2.jogar .carta {
+    cursor: pointer;
+}
+
+#player-2.jogar .carta:hover {
+    z-index: 99999 !important;
+    transform: translateY(10px);
+    border-color: aliceblue;
+}
+
+.baixar-carta {
     z-index: 9999 !important;
-    transform:translateY(10px);
+    transform: rotate(180deg) translateY(10px) !important;
 }
 
-.azul {
-    color: #FFFF;
-    background-color: #0A78B9;
+/*
+Evento do Uno
+*/
+
+.wrapper__btn_uno {
+    position: absolute;
+    z-index: 9999;
+    backdrop-filter: blur(1px);
+    background-color: #00000030;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.vermelho {
-    color: #FFFF;
-    background-color: #DA3E29;
-}
-
-.amarelo {
-    color: #FFFF;
-    background-color: #FFD237;
-}
-
-.verde {
-    color: #FFFF;
-    background-color: #84C03F;
-}
-
-.preto {
-    color: #FFFF;
-    background-color: #151515;
-}
-
-.carta-uno {
-    background-color: #151515;
+#btn_uno {
+    width: 330px;
+    height: 150px;
+    cursor: pointer;
+    font-size: 5em;
 }

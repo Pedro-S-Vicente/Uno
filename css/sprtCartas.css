@@ -1,0 +1,111 @@
+.carta {
+    box-sizing: content-box;
+    width: 150px;
+    height: 240px;
+    display: flex;
+    flex: none;
+    border: 7px solid #000;
+    background-position: center;
+    background-image: url('../images/unoSprts.png');
+    transition: all .2s linear;
+}
+
+.carta-0 {
+    background-position-x: 0;
+    background-position-y: 0px;
+}
+
+.carta-1 {
+    background-position-x: calc(-150px * 1);
+    background-position-y: 0px;
+}
+
+.carta-2 {
+    background-position-x: calc(-150px * 2);
+    background-position-y: 0px;
+}
+
+.carta-3 {
+    background-position-x: calc(-150px * 3);
+    background-position-y: 0px;
+}
+
+.carta-4 {
+    background-position-x: calc(-150px * 4);
+    background-position-y: 0px;
+}
+
+.carta-5 {
+    background-position-x: calc(-150px * 5);
+    background-position-y: 0px;
+}
+
+.carta-6 {
+    background-position-x: calc(-150px * 6);
+    background-position-y: 0px;
+}
+
+.carta-7 {
+    background-position-x: calc(-150px * 7);
+    background-position-y: 0px;
+}
+
+.carta-8 {
+    background-position-x: calc(-150px * 8);
+    background-position-y: 0px;
+}
+
+.carta-9 {
+    background-position-x: calc(-150px * 9);
+    background-position-y: 0px;
+}
+
+.carta-block {
+    background-position-x: calc(-150px * 10);
+    background-position-y: 0px;
+}
+
+.carta-reverse {
+    background-position-x: calc(-150px * 11);
+    background-position-y: 0px;
+}
+
+.carta--2 {
+    background-position-x: calc(-150px * 12);
+    background-position-y: 0px;
+}
+
+.carta-uno {
+    background-position-x: 0px;
+    background-position-y: 240px;
+}
+
+.carta--4 {
+    background-position-x: calc(-150px * 1);
+    background-position-y: 240px;
+}
+
+.carta-mudarCor {
+    background-position-x: calc(-150px * 2);
+    background-position-y: 240px;
+}
+
+.azul {
+    background-color: #0b85cc;
+}
+
+.vermelho {
+    background-color: #e43923;
+}
+
+.amarelo {
+    background-color: #f7c924;
+}
+
+.verde {
+    background-color: #8cd836;
+}
+
+.preto {
+    background-color: #000;
+}
