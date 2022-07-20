@@ -104,13 +104,14 @@ class partida {
         divPlayer = document.querySelectorAll('.player')[idPlayer];
         player = this.objPlayers[idPlayer];
         if (idPlayer === this.vezPlayer && player.constructor.name === "player") {
-            let divCartas;
-            divCartas = document.querySelectorAll(`#player-${idPlayer + 1} .carta`);
-            divCartas.forEach((carta, i)=> {
-                carta.setAttribute('onclick', `p.jogarCarta(${i})`)
-                console.log(2)
-            });
             divPlayer.classList.add('jogar');
+            player.cartas.forEach((carta, i) => {
+                html += `
+                <div class='carta ${carta.cor} carta-${carta.simbolo}' style='z-index: ${i};' onclick="p.jogarCarta(${i})">
+                </div>
+                `;
+            });
+            divPlayer.innerHTML = html;
             
         } else if (player.constructor.name === "player") {
             divPlayer.classList.remove('jogar');
@@ -161,9 +162,8 @@ class partida {
     fazerAnimacaoCartas() {
         let cartasPlayer, a;
         cartasPlayer = document.querySelectorAll(
-            `#player-${this.vezPlayer + 1} .carta`
+            `#player-1 .carta`
         );
-        console.log(this.vezPlayer);
         a = Math.floor(Math.random() * cartasPlayer.length);
         cartasPlayer[a].classList.add("baixar-carta");
     }
