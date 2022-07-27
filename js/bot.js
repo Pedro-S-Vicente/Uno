@@ -22,55 +22,51 @@ class bot extends player {
         return false;
     }
 
+    tempoClicarUno () {
+        setTimeout(()=> {
+            this.clicarUno();
+        }, Math.floor(Math.random() * 1000));
+    }
+
     fazerJogada() {
         setTimeout(()=> {
             this.clicarUno();
         }, Math.floor(Math.random() * 1000))
         
+        while (!this.possuiCartasParaJogar()) {
+            this.comprarCarta();
+        }
+        p.atualizarHtmlPartida();
+        p.fazerAnimacaoCartas();
         setTimeout(()=> {
-            let e;
-            e = setInterval(() => {
-                if (this.possuiCartasParaJogar()) {
-                    p.fazerAnimacaoCartas();
-                    setTimeout(() => {
-                        if (p.qtddComprarCarta > 0 && this.existeEstaCartaParaJogar("-2")) {
-                            p.jogarCarta(this.existeEstaCartaParaJogar("-2"));
-                        } else if (
-                            p.qtddComprarCarta > 0 &&
-                            this.existeEstaCartaParaJogar("-4")
-                        ) {
-                            p.jogarCarta(this.existeEstaCartaParaJogar("-4"));
-                        } else if (this.existeEstaCartaParaJogar("block")) {
-                            p.jogarCarta(this.existeEstaCartaParaJogar("block"));
-                        } else if (this.existeEstaCartaParaJogar("reverse")) {
-                            p.jogarCarta(this.existeEstaCartaParaJogar("reverse"));
-                        } else if (this.existeEstaCartaParaJogar(p.ultimaCarta)) {
-                            p.jogarCarta(this.existeEstaCartaParaJogar(p.ultimaCarta));
-                        } else {
-                            let cartasValidas, cartaAleatoria;
-                            cartasValidas = this.cartasPodemSerJogadas();
-                            cartaAleatoria =
-                                cartasValidas[
-                                    Math.floor(Math.random() * cartasValidas.length)
-                                ];
-                            p.jogarCarta(
-                                this.existeEstaCartaParaJogar(cartaAleatoria.simbolo)
-                            );
-                        }
-                    }, 1250);
-                    clearInterval(e)
-                } else {
-                    this.comprarCarta();
-                    p.atualizarHtmlPartida();
-                }
-
-            }, 250);
-        }, 3000);
+            if (p.qtddComprarCarta > 0 && this.existeEstaCartaParaJogar('+2')) {
+                p.jogarCarta(this.existeEstaCartaParaJogar('+2'));
+            } else if (p.qtddComprarCarta > 0 && this.existeEstaCartaParaJogar('+4')){
+                p.jogarCarta(this.existeEstaCartaParaJogar('+4'))
+            } else if (this.existeEstaCartaParaJogar('block')) {
+                p.jogarCarta(this.existeEstaCartaParaJogar('block'));
+            } else if (this.existeEstaCartaParaJogar('reverse')) {
+                p.jogarCarta(this.existeEstaCartaParaJogar('reverse'));
+            } else if (this.existeEstaCartaParaJogar(p.ultimaCarta)) {
+                p.jogarCarta(this.existeEstaCartaParaJogar(p.ultimaCarta));
+            } else {
+                let cartasValidas, cartaAleatoria;
+                cartasValidas = this.cartasPodemSerJogadas();
+                cartaAleatoria = cartasValidas[Math.floor(Math.random() * cartasValidas.length)];
+                p.jogarCarta(this.existeEstaCartaParaJogar(cartaAleatoria.simbolo));
+            }
+        }, 1000)
     }
 
     clicarUno () {
         if (p.playerEmUno != null) {
             p.uno(0);
         }
+    }
+
+    escolherCor() {
+        setTimeout(()=> {
+            p.cor(Math.floor(Math.random() * coresCartas.length));
+        }, 1250)
     }
 }

@@ -83,7 +83,8 @@
 Evento do Uno
 */
 
-.wrapper__btn_uno {
+.wrapper__btn_uno,
+.wrapper__escolher_cor {
     position: absolute;
     z-index: 9999;
     backdrop-filter: blur(1px);
@@ -100,4 +101,11 @@ Evento do Uno
     height: 150px;
     cursor: pointer;
     font-size: 5em;
+}
+
+.wrapper__escolher_cor button {
+    box-sizing: content-box;
+    width: 240px;
+    height: 240px;
+    border: 7px solid #000;
 }
